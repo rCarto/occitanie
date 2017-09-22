@@ -1,12 +1,15 @@
+# load library
 library(cartography)
 library(linemap)
 
+# load data
 load("data/Occ.RData")
 data("occitanie")
 
-
 # create a pdf
-pdf(height = 8.27, width = 11.69, file = "TOTO.PDF", pointsize = 15, pagecentre = F )
+pdf(file = "img/occitanie.pdf", width = 11.69, height = 8.27, pointsize = 15)
+# or a png...
+# png(filename = "img/occitanie.png", width = 1600, height = 1150, res = 180)
 
 # values usefull to plot text and polygons
 bbr <- st_bbox(region)
@@ -40,9 +43,9 @@ labelLayer(x = prefecture, txt = "NOM_COM", col = "ivory4",
            halo = TRUE, bg = "ivory1")
 
 # add a title
-text(x = bbr[1], y = bbr[4], 
+text(x = bbr[1] - 10000, y = bbr[4], 
      labels = "Répartition de la\npopulation\nen Occitanie",  
-      col = "ivory4", font = 4,  cex = 2.3, adj = c(0,1) )
+      col = "ivory4", font = 4,  cex = 1.8, adj = c(0,1) )
 
 # add sources
 mapsources <-
@@ -56,27 +59,24 @@ maptxt <-
 "Il est possible de reproduire cette carte
 entièrement réalisée avec le logiciel R en 
 utilisant les données et scripts disponibles 
-ici : https://github.com/rCarto/occitanie"
-text(x = bbr[1], y = bbr2[2], labels = maptxt,
-     adj = c(0,0), cex = 1, col = "ivory4")
+ici : https://github.com/rCarto/occitanie."
+text(x = bbr[1] - 10000, y = bbr2[2], labels = maptxt,
+     adj = c(0,0), cex = .9, col = "ivory4")
 
 # add a north arrow
 north(col = 'ivory1')
 
-
-
 # add R logo
 logo1 <- png::readPNG("img/Rlogogrey.png")
 pp <- dim(logo1)[2:1] * 75
-yref <- 2226000
-rasterImage(logo1, bbr[1], yref - pp[2], bbr[1] + pp[1], yref) 
+yref <- 2220000
+rasterImage(logo1, bbr[1] - 10000, yref - pp[2], bbr[1] + pp[1] - 10000, yref) 
 
 # add riate logo
 logo2 <- png::readPNG("img/riate_grew_high.png")
 pp <- dim(logo2)[2:1] * 50
 yref <- 2170000
 rasterImage(logo2, bbr2[3] - pp[1], yref, bbr2[3], yref + pp[2]) 
-
 
 # add creative commons
 logo3 <- png::readPNG("img/by-nc-sa.png")
@@ -87,7 +87,6 @@ rasterImage(logo3, bbr2[3], yref, bbr2[3] + pp[1], yref + pp[2], angle = 90)
 # add author
 text(x = bbr2[3], y = yref + pp[1], labels = "Timothée Giraud",srt = 90,
      cex = 0.5, col = "ivory4", adj = c(-0.05,-0.2))
-
 
 dev.off()
 
